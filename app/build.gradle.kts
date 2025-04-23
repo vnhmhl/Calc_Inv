@@ -47,6 +47,11 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("com.itextpdf:itext7-core:7.2.3")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation ("org.apache.poi:poi:5.2.3")
+    implementation ("org.apache.poi:poi-ooxml:5.2.3")
+
 }
+
+
 
 

@@ -30,6 +30,19 @@ class MainActivity : AppCompatActivity() {
         val resultTextView = findViewById<TextView>(R.id.resultTextView)
         val themeSwitch = findViewById<Switch>(R.id.themeSwitch)
         val exportPdfButton = findViewById<Button>(R.id.exportPdfButton)
+        val exportCsvButton = findViewById<Button>(R.id.exportCsvButton)
+        val exportExcelButton = findViewById<Button>(R.id.exportExcelButton)
+
+        exportCsvButton.setOnClickListener {
+            val result = resultTextView.text.toString()
+            exportToCSV(result)
+        }
+
+        exportExcelButton.setOnClickListener {
+            val result = resultTextView.text.toString()
+            exportToExcel(result)
+        }
+
 
         // Настройка переключателя темы
         setupThemeSwitch(themeSwitch)
@@ -171,4 +184,51 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Ошибка создания PDF: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
+
+    // Экспорт в CSV
+    private fun exportToCSV(result: String) {
+        val fileName = "InvestmentData.csv"
+        val dir = getExternalFilesDir(null)
+
+        if (dir == null) {
+            Toast.makeText(this, "Невозможно получить доступ к хранилищу", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        val file = File(dir, fileName)
+
+        try {
+            val sanitizedResult = result.replace("\"", "\"\"") // экранирование кавычек
+            file.writeText("Отчёт,Сумма\n\"Результат\",\"$sanitizedResult\"\n", Charsets.UTF_8)
+            Toast.makeText(this, "CSV сохранён: ${file.absolutePath}", Toast.LENGTH_LONG).show()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Ошибка при сохранении CSV: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+
+
+    // Экспорт в Excel
+    private fun exportToExcel(result: String) {
+        val fileName = "InvestmentData.xls" // Excel откроет как таблицу
+        val dir = getExternalFilesDir(null)
+
+        if (dir == null) {
+            Toast.makeText(this, "Невозможно получить доступ к хранилищу", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        val file = File(dir, fileName)
+
+        try {
+            val sanitizedResult = result.replace("\"", "\"\"")
+            file.writeText("Отчёт\tСумма\nРезультат\t$sanitizedResult\n", Charsets.UTF_8)
+            Toast.makeText(this, "Excel-файл сохранён: ${file.absolutePath}", Toast.LENGTH_LONG).show()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Ошибка при сохранении Excel: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+
+
 }
