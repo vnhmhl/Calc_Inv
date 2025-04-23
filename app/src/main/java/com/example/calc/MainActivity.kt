@@ -1,0 +1,174 @@
+package com.example.calc
+
+import android.os.Bundle
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import java.io.File
+import com.itextpdf.kernel.pdf.PdfWriter
+import com.itextpdf.kernel.pdf.PdfDocument
+import com.itextpdf.layout.Document
+import com.itextpdf.layout.element.Paragraph
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Инициализация элементов интерфейса
+        val lineChart = findViewById<LineChart>(R.id.lineChart)
+        val initialAmountEditText = findViewById<EditText>(R.id.initialAmountEditText)
+        val annualRateEditText = findViewById<EditText>(R.id.annualRateEditText)
+        val yearsEditText = findViewById<EditText>(R.id.yearsEditText)
+        val monthlyContributionEditText = findViewById<EditText>(R.id.monthlyContributionEditText)
+        val calculateButton = findViewById<Button>(R.id.calculateButton)
+        val resultTextView = findViewById<TextView>(R.id.resultTextView)
+        val themeSwitch = findViewById<Switch>(R.id.themeSwitch)
+        val exportPdfButton = findViewById<Button>(R.id.exportPdfButton)
+
+        // Настройка переключателя темы
+        setupThemeSwitch(themeSwitch)
+
+        // Обработчик кнопки "Рассчитать"
+        calculateButton.setOnClickListener {
+            val initialAmount = initialAmountEditText.text.toString().toDoubleOrNull() ?: 0.0
+            val annualRate = annualRateEditText.text.toString().toDoubleOrNull() ?: 0.0
+            val years = yearsEditText.text.toString().toIntOrNull() ?: 0
+            val monthlyContribution = monthlyContributionEditText.text.toString().toDoubleOrNull() ?: 0.0
+
+            if (initialAmount <= 0 || annualRate <= 0 || years <= 0) {
+                resultTextView.text = "Введите корректные данные."
+                return@setOnClickListener
+            }
+
+            val finalAmount = calculateCompoundInterest(initialAmount, annualRate, years, monthlyContribution)
+            resultTextView.text = "Итоговая сумма: %.2f ₽".format(finalAmount)
+
+            // Генерация данных для графика
+            val dataPoints = generateGraphData(initialAmount, annualRate, years, monthlyContribution)
+            displayGraph(lineChart, dataPoints)
+
+            // Показать кнопку экспорта
+            exportPdfButton.visibility = Button.VISIBLE
+        }
+
+        // Обработчик кнопки "Экспортировать в PDF"
+        exportPdfButton.setOnClickListener {
+            val resultText = resultTextView.text.toString()
+            if (resultText.isNotBlank() && resultText != "Результат появится здесь") {
+                exportToPdf(resultText)
+            } else {
+                Toast.makeText(this, "Нет данных для экспорта!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    // Расчёт сложных процентов
+    private fun calculateCompoundInterest(
+        initialAmount: Double,
+        annualRate: Double,
+        years: Int,
+        monthlyContribution: Double
+    ): Double {
+        var totalAmount = initialAmount
+        val monthlyRate = annualRate / 100 / 12
+        val months = years * 12
+
+        for (i in 1..months) {
+            totalAmount += monthlyContribution
+            totalAmount *= 1 + monthlyRate
+        }
+
+        return totalAmount
+    }
+
+    // Генерация данных для графика
+    private fun generateGraphData(
+        initialAmount: Double,
+        annualRate: Double,
+        years: Int,
+        monthlyContribution: Double
+    ): List<Entry> {
+        val data = mutableListOf<Entry>()
+        var totalAmount = initialAmount
+        val monthlyRate = annualRate / 100 / 12
+        val months = years * 12
+
+        for (i in 0..months) {
+            data.add(Entry(i.toFloat() / 12, totalAmount.toFloat()))
+            totalAmount += monthlyContribution
+            totalAmount *= 1 + monthlyRate
+        }
+
+        return data
+    }
+
+    // Отображение графика
+    private fun displayGraph(lineChart: LineChart, dataPoints: List<Entry>) {
+        val dataSet = LineDataSet(dataPoints, "Прирост инвестиций")
+        dataSet.color = resources.getColor(android.R.color.holo_blue_dark)
+        dataSet.valueTextSize = 10f
+
+        val lineData = LineData(dataSet)
+        lineChart.data = lineData
+        lineChart.description.text = "График роста инвестиций"
+        lineChart.visibility = LineChart.VISIBLE
+        lineChart.invalidate() // Обновление графика
+    }
+
+    // Настройка переключателя темы
+    private fun setupThemeSwitch(themeSwitch: Switch) {
+        val sharedPreferences = getSharedPreferences("ThemePrefs", MODE_PRIVATE)
+        val isDarkMode = sharedPreferences.getBoolean("isDarkMode", false)
+
+        themeSwitch.isChecked = isDarkMode
+
+        if (isDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+
+        themeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            val editor = sharedPreferences.edit()
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                editor.putBoolean("isDarkMode", true)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                editor.putBoolean("isDarkMode", false)
+            }
+            editor.apply()
+        }
+    }
+
+    // Экспорт данных в PDF
+    private fun exportToPdf(result: String) {
+        val fileName = "InvestmentReport.pdf"
+        val filePath = File(getExternalFilesDir(null), fileName)
+
+        try {
+            // Создаем PDF
+            val pdfWriter = PdfWriter(filePath)
+            val pdfDocument = PdfDocument(pdfWriter)
+            val document = Document(pdfDocument)
+
+            // Добавляем текст в PDF
+            document.add(Paragraph("Инвестиционный отчёт"))
+            document.add(Paragraph("Результат: $result"))
+
+            // Закрываем документ
+            document.close()
+
+            Toast.makeText(this, "PDF сохранён в ${filePath.absolutePath}", Toast.LENGTH_LONG).show()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Ошибка создания PDF: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+}

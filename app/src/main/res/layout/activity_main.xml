@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- График -->
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChart"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone" />
+
+        <!-- Метка и поле для начальной суммы -->
+        <TextView
+            android:id="@+id/initialAmountLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Начальная сумма"
+            android:textSize="16sp"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/initialAmountEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Метка и поле для годового процента -->
+        <TextView
+            android:id="@+id/annualRateLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Годовой процент (%)"
+            android:textSize="16sp"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/annualRateEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Метка и поле для срока инвестирования -->
+        <TextView
+            android:id="@+id/yearsLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Количество лет"
+            android:textSize="16sp"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/yearsEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Метка и поле для ежемесячных взносов -->
+        <TextView
+            android:id="@+id/monthlyContributionLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ежемесячный взнос (₽)"
+            android:textSize="16sp"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/monthlyContributionEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Кнопка расчета -->
+        <Button
+            android:id="@+id/calculateButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Рассчитать"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/purple_500" />
+
+        <!-- Результат -->
+        <TextView
+            android:id="@+id/resultTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Результат появится здесь"
+            android:textSize="18sp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Переключатель темы -->
+        <Switch
+            android:id="@+id/themeSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Темная тема"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Кнопка для экспорта в PDF -->
+        <Button
+            android:id="@+id/exportPdfButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Экспортировать в PDF"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp" />
+    </LinearLayout>
+</ScrollView>
