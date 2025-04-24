@@ -13,6 +13,9 @@ import com.itextpdf.kernel.pdf.PdfWriter
 import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.element.Paragraph
+import android.graphics.Color
+import android.util.Log
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -54,10 +57,8 @@ class MainActivity : AppCompatActivity() {
             val years = yearsEditText.text.toString().toIntOrNull() ?: 0
             val monthlyContribution = monthlyContributionEditText.text.toString().toDoubleOrNull() ?: 0.0
 
-            if (initialAmount <= 0 || annualRate <= 0 || years <= 0) {
-                resultTextView.text = "Введите корректные данные."
-                return@setOnClickListener
-            }
+            Log.d("DEBUG", "initial=$initialAmount, rate=$annualRate, years=$years, monthly=$monthlyContribution")
+
 
             val finalAmount = calculateCompoundInterest(initialAmount, annualRate, years, monthlyContribution)
             resultTextView.text = "Итоговая сумма: %.2f ₽".format(finalAmount)
@@ -123,28 +124,44 @@ class MainActivity : AppCompatActivity() {
 
     // Отображение графика
     private fun displayGraph(lineChart: LineChart, dataPoints: List<Entry>) {
+        val isDarkTheme = resources.configuration.uiMode and
+                android.content.res.Configuration.UI_MODE_NIGHT_MASK == android.content.res.Configuration.UI_MODE_NIGHT_YES
+
         val dataSet = LineDataSet(dataPoints, "Прирост инвестиций").apply {
-            color = resources.getColor(android.R.color.holo_blue_dark, null)
+            color = if (isDarkTheme) Color.CYAN else Color.BLUE
             valueTextSize = 10f
             setDrawCircles(true)
             circleRadius = 3f
-            setCircleColor(resources.getColor(android.R.color.holo_blue_dark, null))
+            setCircleColor(color)
             lineWidth = 2f
-            mode = LineDataSet.Mode.CUBIC_BEZIER // Плавные линии
-            setDrawValues(false) // Не показывать значения над точками
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+            setDrawValues(false)
         }
 
         lineChart.apply {
             data = LineData(dataSet)
             description.text = "График роста инвестиций"
             description.textSize = 12f
-            xAxis.labelRotationAngle = -45f
-            axisRight.isEnabled = false // скрываем правую ось
-            legend.isEnabled = false // если не нужен заголовок графика
-            visibility = LineChart.VISIBLE
+            description.textColor = if (isDarkTheme) Color.WHITE else Color.BLACK
+
+            xAxis.apply {
+                textColor = if (isDarkTheme) Color.LTGRAY else Color.DKGRAY
+                labelRotationAngle = -45f
+                gridColor = if (isDarkTheme) Color.GRAY else Color.LTGRAY
+            }
+
+            axisLeft.apply {
+                textColor = if (isDarkTheme) Color.LTGRAY else Color.DKGRAY
+                gridColor = if (isDarkTheme) Color.GRAY else Color.LTGRAY
+            }
+
+            axisRight.isEnabled = false
+            legend.isEnabled = false
+            setBackgroundColor(if (isDarkTheme) Color.BLACK else Color.WHITE)
             invalidate()
         }
     }
+
 
 
     // Настройка переключателя темы

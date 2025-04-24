@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     android:fillViewport="true">
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,9 +16,10 @@
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_marginBottom="16dp"
-            android:visibility="gone" />
+            android:layout_height="300dp"
+            android:layout_margin="16dp"
+            />
+
 
         <!-- Метка и поле для начальной суммы -->
         <TextView
@@ -89,7 +92,9 @@
             android:layout_height="wrap_content"
             android:text="Рассчитать"
             android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/purple_500" />
+            android:backgroundTint="@color/purple_500"
+            android:textColor="?android:textColorPrimary"
+            />
 
         <!-- Результат -->
         <TextView

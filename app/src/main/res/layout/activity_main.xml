@@ -14,9 +14,9 @@
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_marginBottom="16dp"
-            android:visibility="gone" />
+            android:layout_height="300dp"
+            android:layout_marginTop="16dp"/>
+
 
         <!-- Метка и поле для начальной суммы -->
         <TextView
