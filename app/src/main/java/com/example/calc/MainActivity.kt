@@ -123,16 +123,29 @@ class MainActivity : AppCompatActivity() {
 
     // Отображение графика
     private fun displayGraph(lineChart: LineChart, dataPoints: List<Entry>) {
-        val dataSet = LineDataSet(dataPoints, "Прирост инвестиций")
-        dataSet.color = resources.getColor(android.R.color.holo_blue_dark)
-        dataSet.valueTextSize = 10f
+        val dataSet = LineDataSet(dataPoints, "Прирост инвестиций").apply {
+            color = resources.getColor(android.R.color.holo_blue_dark, null)
+            valueTextSize = 10f
+            setDrawCircles(true)
+            circleRadius = 3f
+            setCircleColor(resources.getColor(android.R.color.holo_blue_dark, null))
+            lineWidth = 2f
+            mode = LineDataSet.Mode.CUBIC_BEZIER // Плавные линии
+            setDrawValues(false) // Не показывать значения над точками
+        }
 
-        val lineData = LineData(dataSet)
-        lineChart.data = lineData
-        lineChart.description.text = "График роста инвестиций"
-        lineChart.visibility = LineChart.VISIBLE
-        lineChart.invalidate() // Обновление графика
+        lineChart.apply {
+            data = LineData(dataSet)
+            description.text = "График роста инвестиций"
+            description.textSize = 12f
+            xAxis.labelRotationAngle = -45f
+            axisRight.isEnabled = false // скрываем правую ось
+            legend.isEnabled = false // если не нужен заголовок графика
+            visibility = LineChart.VISIBLE
+            invalidate()
+        }
     }
+
 
     // Настройка переключателя темы
     private fun setupThemeSwitch(themeSwitch: Switch) {
@@ -229,6 +242,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Ошибка при сохранении Excel: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
+
 
 
 }
