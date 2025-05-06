@@ -15,7 +15,9 @@ import com.itextpdf.layout.Document
 import com.itextpdf.layout.element.Paragraph
 import android.graphics.Color
 import android.util.Log
-
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,6 +37,17 @@ class MainActivity : AppCompatActivity() {
         val exportPdfButton = findViewById<Button>(R.id.exportPdfButton)
         val exportCsvButton = findViewById<Button>(R.id.exportCsvButton)
         val exportExcelButton = findViewById<Button>(R.id.exportExcelButton)
+        val clearButton = findViewById<Button>(R.id.clearButton)
+
+        clearButton.setOnClickListener {
+            initialAmountEditText.text.clear()
+            annualRateEditText.text.clear()
+            yearsEditText.text.clear()
+            monthlyContributionEditText.text.clear()
+            resultTextView.text = "Результат появится здесь"
+            lineChart.clear()
+            exportPdfButton.visibility = Button.GONE
+        }
 
         exportCsvButton.setOnClickListener {
             val result = resultTextView.text.toString()
@@ -61,7 +74,13 @@ class MainActivity : AppCompatActivity() {
 
 
             val finalAmount = calculateCompoundInterest(initialAmount, annualRate, years, monthlyContribution)
-            resultTextView.text = "Итоговая сумма: %.2f ₽".format(finalAmount)
+            val symbols = DecimalFormatSymbols(Locale.getDefault()).apply {
+                groupingSeparator = ' '
+                decimalSeparator = ','
+            }
+            val formatter = DecimalFormat("#,##0.00", symbols)
+            val formattedAmount = formatter.format(finalAmount)
+            resultTextView.text = "Итоговая сумма: $formattedAmount ₽"
 
             // Генерация данных для графика
             val dataPoints = generateGraphData(initialAmount, annualRate, years, monthlyContribution)

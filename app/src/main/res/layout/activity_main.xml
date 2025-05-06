@@ -11,14 +11,15 @@
         android:padding="16dp">
 
         <!-- График -->
+
+
+        <!-- Метка и поле для начальной суммы -->
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
 
-
-        <!-- Метка и поле для начальной суммы -->
         <TextView
             android:id="@+id/initialAmountLabel"
             android:layout_width="match_parent"
@@ -83,15 +84,23 @@
             android:layout_marginBottom="12dp" />
 
         <!-- Кнопка расчета -->
+
         <Button
             android:id="@+id/calculateButton"
-            android:layout_width="match_parent"
+            android:layout_width="375dp"
             android:layout_height="wrap_content"
-            android:text="Рассчитать"
             android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/purple_500" />
+            android:backgroundTint="@color/purple_500"
+            android:text="Рассчитать" />
 
         <!-- Результат -->
+        <Button
+            android:id="@+id/clearButton"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Очистить" />
+
         <TextView
             android:id="@+id/resultTextView"
             android:layout_width="match_parent"
@@ -127,6 +136,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Экспорт в Excel" />
+        <Button
+            android:id="@+id/clearButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Очистить"
+            android:layout_marginTop="8dp"
+            />
+
+        <!-- Кнопка для чистки полей -->
+        <Button
+            android:id="@+id/clearButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Очистить"
+            android:layout_marginTop="8dp"
+            />
+
 
     </LinearLayout>
 </ScrollView>
