@@ -11,15 +11,13 @@
         android:padding="16dp">
 
         <!-- График -->
-
-
-        <!-- Метка и поле для начальной суммы -->
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_marginTop="16dp" />
 
+        <!-- Начальная сумма -->
         <TextView
             android:id="@+id/initialAmountLabel"
             android:layout_width="match_parent"
@@ -33,9 +31,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
+            android:hint="Введите начальную сумму (₽)"
             android:layout_marginBottom="12dp" />
 
-        <!-- Метка и поле для годового процента -->
+        <!-- Годовой процент -->
         <TextView
             android:id="@+id/annualRateLabel"
             android:layout_width="match_parent"
@@ -49,9 +48,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
+            android:hint="Введите годовой процент"
             android:layout_marginBottom="12dp" />
 
-        <!-- Метка и поле для срока инвестирования -->
+        <!-- Количество лет -->
         <TextView
             android:id="@+id/yearsLabel"
             android:layout_width="match_parent"
@@ -65,9 +65,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
+            android:hint="Введите срок инвестирования (лет)"
             android:layout_marginBottom="12dp" />
 
-        <!-- Метка и поле для ежемесячных взносов -->
+        <!-- Ежемесячный взнос -->
         <TextView
             android:id="@+id/monthlyContributionLabel"
             android:layout_width="match_parent"
@@ -81,26 +82,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
+            android:hint="Введите ежемесячный взнос"
             android:layout_marginBottom="12dp" />
 
         <!-- Кнопка расчета -->
-
         <Button
             android:id="@+id/calculateButton"
-            android:layout_width="375dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:backgroundTint="@color/purple_500"
             android:text="Рассчитать" />
 
-        <!-- Результат -->
+        <!-- Кнопка очистки -->
         <Button
             android:id="@+id/clearButton"
-            android:layout_width="170dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Очистить" />
+            android:text="Очистить"
+            android:layout_marginBottom="16dp" />
 
+        <!-- Результат -->
         <TextView
             android:id="@+id/resultTextView"
             android:layout_width="match_parent"
@@ -117,42 +119,27 @@
             android:text="Темная тема"
             android:layout_marginBottom="16dp" />
 
-        <!-- Кнопка для экспорта в PDF -->
+        <!-- Кнопки экспорта -->
         <Button
             android:id="@+id/exportPdfButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Экспортировать в PDF"
             android:visibility="gone"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="8dp" />
+
         <Button
             android:id="@+id/exportCsvButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Экспорт в CSV" />
+            android:text="Экспорт в CSV"
+            android:layout_marginBottom="8dp" />
 
         <Button
             android:id="@+id/exportExcelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Экспорт в Excel" />
-        <Button
-            android:id="@+id/clearButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Очистить"
-            android:layout_marginTop="8dp"
-            />
-
-        <!-- Кнопка для чистки полей -->
-        <Button
-            android:id="@+id/clearButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Очистить"
-            android:layout_marginTop="8dp"
-            />
-
 
     </LinearLayout>
 </ScrollView>
